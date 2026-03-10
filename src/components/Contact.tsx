@@ -1,68 +1,124 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 const Contact = () => {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [projectType, setProjectType] = useState("");
+  const [message, setMessage] = useState("");
+  const [consent, setConsent] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !phone.trim() || !consent) {
+      toast({ title: "Заполните обязательные поля", variant: "destructive" });
+      return;
+    }
+    toast({
+      title: "Заявка отправлена!",
+      description: "Мы свяжемся с вами в ближайшее время.",
+    });
+    setName("");
+    setPhone("");
+    setProjectType("");
+    setMessage("");
+    setConsent(false);
+  };
+
   return (
-    <section id="contact" className="py-32 bg-background">
+    <section id="contact" className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-20">
-            <div>
-              <h2 className="text-minimal text-muted-foreground mb-4">GET IN TOUCH</h2>
-              <h3 className="text-4xl md:text-6xl font-light text-architectural mb-12">
-                Let's Create Something
-                <br />
-                Extraordinary
-              </h3>
-              
-              <div className="space-y-8">
-                <div>
-                  <h4 className="text-minimal text-muted-foreground mb-2">EMAIL</h4>
-                  <a href="mailto:hello@archstudio.com" className="text-xl hover:text-muted-foreground transition-colors duration-300">
-                    hello@archstudio.com
-                  </a>
-                </div>
-                
-                <div>
-                  <h4 className="text-minimal text-muted-foreground mb-2">PHONE</h4>
-                  <a href="tel:+1234567890" className="text-xl hover:text-muted-foreground transition-colors duration-300">
-                    +1 (234) 567-8900
-                  </a>
-                </div>
-                
-                <div>
-                  <h4 className="text-minimal text-muted-foreground mb-2">STUDIO</h4>
-                  <address className="text-xl not-italic">
-                    123 Design Avenue
-                    <br />
-                    New York, NY 10001
-                  </address>
-                </div>
-              </div>
+        <div className="max-w-2xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-12 text-center"
+          >
+            <p className="text-minimal text-muted-foreground mb-4">КОНТАКТЫ</p>
+            <h2 className="text-3xl md:text-5xl font-light text-architectural mb-4">
+              Оставьте заявку
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              Расскажите о вашем проекте — мы подготовим индивидуальное предложение
+            </p>
+          </motion.div>
+
+          <motion.form
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            onSubmit={handleSubmit}
+            className="space-y-5"
+          >
+            <Input
+              placeholder="Ваше имя *"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="rounded-none border-border h-12"
+              maxLength={100}
+            />
+            <Input
+              placeholder="Телефон *"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="rounded-none border-border h-12"
+              maxLength={20}
+            />
+            <Select value={projectType} onValueChange={setProjectType}>
+              <SelectTrigger className="rounded-none border-border h-12">
+                <SelectValue placeholder="Тип проекта" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="countertop">Столешница</SelectItem>
+                <SelectItem value="sink">Раковина</SelectItem>
+                <SelectItem value="bar">Барная стойка</SelectItem>
+                <SelectItem value="other">Другое</SelectItem>
+              </SelectContent>
+            </Select>
+            <Textarea
+              placeholder="Сообщение"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="rounded-none border-border min-h-[120px]"
+              maxLength={1000}
+            />
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="consent"
+                checked={consent}
+                onCheckedChange={(checked) => setConsent(checked === true)}
+                className="mt-0.5"
+              />
+              <label htmlFor="consent" className="text-xs text-muted-foreground leading-relaxed cursor-pointer">
+                Я согласен(а) на обработку персональных данных в соответствии с политикой конфиденциальности
+              </label>
             </div>
-            
-            <div className="space-y-8">
-              <div>
-                <h4 className="text-minimal text-muted-foreground mb-6">FOLLOW US</h4>
-                <div className="space-y-4">
-                  <a href="#" className="block text-xl hover:text-muted-foreground transition-colors duration-300">
-                    Instagram
-                  </a>
-                  <a href="#" className="block text-xl hover:text-muted-foreground transition-colors duration-300">
-                    LinkedIn
-                  </a>
-                  <a href="#" className="block text-xl hover:text-muted-foreground transition-colors duration-300">
-                    Behance
-                  </a>
-                </div>
-              </div>
-              
-              <div className="pt-12 border-t border-border">
-                <p className="text-muted-foreground">
-                  We approach each project with curiosity, rigor, and a commitment to excellence. 
-                  Our process begins with listening, understanding your vision, and translating 
-                  it into spaces that exceed expectations.
-                </p>
-              </div>
-            </div>
-          </div>
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full rounded-none h-12 text-sm tracking-wider uppercase"
+              disabled={!consent}
+            >
+              Отправить заявку
+            </Button>
+          </motion.form>
         </div>
       </div>
     </section>
