@@ -43,20 +43,6 @@ const Calculator = () => {
     }
   };
 
-  const handleSubmitContact = () => {
-    if (!contactValue.trim()) return;
-    toast({
-      title: "Заявка отправлена!",
-      description: `${product}, ${size}, ${complexity}. Мы свяжемся с вами через ${contactType === "email" ? "email" : "Telegram/Viber"}.`,
-    });
-    setShowModal(false);
-    setStep(0);
-    setProduct("");
-    setSize("");
-    setComplexity("");
-    setContactValue("");
-  };
-
   return (
     <section id="calculator" className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-6">
@@ -143,9 +129,21 @@ const Calculator = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 mt-2">
+          <form
+            className="space-y-4 mt-2"
+            action="https://formspree.io/f/xreyplvv"
+            method="POST"
+          >
+            <input type="hidden" name="_redirect" value="/spasibo.html" />
+            <input type="hidden" name="_form" value="Калькулятор" />
+            <input type="hidden" name="product" value={product} />
+            <input type="hidden" name="size" value={size} />
+            <input type="hidden" name="complexity" value={complexity} />
+            <input type="hidden" name="contactType" value={contactType} />
+
             <div className="flex gap-2">
               <button
+                type="button"
                 onClick={() => setContactType("telegram")}
                 className={`flex-1 p-3 border text-sm transition-colors duration-200 ${
                   contactType === "telegram"
@@ -156,6 +154,7 @@ const Calculator = () => {
                 Telegram / Viber
               </button>
               <button
+                type="button"
                 onClick={() => setContactType("email")}
                 className={`flex-1 p-3 border text-sm transition-colors duration-200 ${
                   contactType === "email"
@@ -169,20 +168,22 @@ const Calculator = () => {
 
             <input
               type={contactType === "email" ? "email" : "text"}
+              name="contact"
               placeholder={contactType === "email" ? "your@email.com" : "+375 (__) ___-__-__"}
               value={contactValue}
               onChange={(e) => setContactValue(e.target.value)}
               className="w-full p-3 border border-border bg-background text-foreground text-sm focus:outline-none focus:border-foreground transition-colors"
+              required
             />
 
             <Button
               className="w-full rounded-none"
-              onClick={handleSubmitContact}
+              type="submit"
               disabled={!contactValue.trim()}
             >
               Отправить
             </Button>
-          </div>
+          </form>
         </DialogContent>
       </Dialog>
     </section>

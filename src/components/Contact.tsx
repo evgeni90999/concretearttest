@@ -22,20 +22,11 @@ const Contact = () => {
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
     if (!name.trim() || !phone.trim() || !consent) {
+      e.preventDefault();
       toast({ title: "Заполните обязательные поля", variant: "destructive" });
       return;
     }
-    toast({
-      title: "Заявка отправлена!",
-      description: "Мы свяжемся с вами в ближайшее время.",
-    });
-    setName("");
-    setPhone("");
-    setProjectType("");
-    setMessage("");
-    setConsent(false);
   };
 
   return (
@@ -64,10 +55,15 @@ const Contact = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             onSubmit={handleSubmit}
+            action="https://formspree.io/f/xnjgpzye"
+            method="POST"
             className="space-y-5"
           >
+            <input type="hidden" name="_redirect" value="/spasibo.html" />
+            <input type="hidden" name="_form" value="Контакты" />
             <Input
               placeholder="Ваше имя *"
+              name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="rounded-none border-border h-12"
@@ -76,12 +72,13 @@ const Contact = () => {
             <Input
               placeholder="Телефон *"
               type="tel"
+              name="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="rounded-none border-border h-12"
               maxLength={20}
             />
-            <Select value={projectType} onValueChange={setProjectType}>
+            <Select value={projectType} onValueChange={setProjectType} name="projectType">
               <SelectTrigger className="rounded-none border-border h-12">
                 <SelectValue placeholder="Тип проекта" />
               </SelectTrigger>
@@ -94,6 +91,7 @@ const Contact = () => {
             </Select>
             <Textarea
               placeholder="Сообщение"
+              name="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="rounded-none border-border min-h-[120px]"
@@ -102,6 +100,7 @@ const Contact = () => {
             <div className="flex items-start gap-3">
               <Checkbox
                 id="consent"
+                name="consent"
                 checked={consent}
                 onCheckedChange={(checked) => setConsent(checked === true)}
                 className="mt-0.5"
