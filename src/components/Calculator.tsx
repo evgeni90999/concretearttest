@@ -2,6 +2,13 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 const productTypes = ["Столешница", "Раковина", "Барная стойка", "Другое"];
 const sizes = ["< 1 м²", "1–2 м²", "2–3 м²", "> 3 м²"];
@@ -12,6 +19,9 @@ const Calculator = () => {
   const [product, setProduct] = useState("");
   const [size, setSize] = useState("");
   const [complexity, setComplexity] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [contactType, setContactType] = useState<"email" | "telegram">("telegram");
+  const [contactValue, setContactValue] = useState("");
   const { toast } = useToast();
 
   const currentOptions = step === 0 ? productTypes : step === 1 ? sizes : complexities;
@@ -29,15 +39,22 @@ const Calculator = () => {
     if (step < 2) {
       setStep(step + 1);
     } else {
-      toast({
-        title: "Заявка отправлена!",
-        description: `${product}, ${size}, ${complexity}. Мы свяжемся с вами для расчёта стоимости.`,
-      });
-      setStep(0);
-      setProduct("");
-      setSize("");
-      setComplexity("");
+      setShowModal(true);
     }
+  };
+
+  const handleSubmitContact = () => {
+    if (!contactValue.trim()) return;
+    toast({
+      title: "Заявка отправлена!",
+      description: `${product}, ${size}, ${complexity}. Мы свяжемся с вами через ${contactType === "email" ? "email" : "Telegram/Viber"}.`,
+    });
+    setShowModal(false);
+    setStep(0);
+    setProduct("");
+    setSize("");
+    setComplexity("");
+    setContactValue("");
   };
 
   return (
@@ -114,6 +131,60 @@ const Calculator = () => {
           </motion.div>
         </div>
       </div>
+
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="sm:max-w-md rounded-none">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-light text-architectural">
+              Куда отправить расчёт?
+            </DialogTitle>
+            <DialogDescription>
+              Укажите удобный способ связи, и мы пришлём вам расчёт стоимости.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 mt-2">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setContactType("telegram")}
+                className={`flex-1 p-3 border text-sm transition-colors duration-200 ${
+                  contactType === "telegram"
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border hover:border-foreground/50"
+                }`}
+              >
+                Telegram / Viber
+              </button>
+              <button
+                onClick={() => setContactType("email")}
+                className={`flex-1 p-3 border text-sm transition-colors duration-200 ${
+                  contactType === "email"
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border hover:border-foreground/50"
+                }`}
+              >
+                Email
+              </button>
+            </div>
+
+            <input
+              type={contactType === "email" ? "email" : "text"}
+              placeholder={contactType === "email" ? "your@email.com" : "+375 (__) ___-__-__"}
+              value={contactValue}
+              onChange={(e) => setContactValue(e.target.value)}
+              className="w-full p-3 border border-border bg-background text-foreground text-sm focus:outline-none focus:border-foreground transition-colors"
+            />
+
+            <Button
+              className="w-full rounded-none"
+              onClick={handleSubmitContact}
+              disabled={!contactValue.trim()}
+            >
+              Отправить
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

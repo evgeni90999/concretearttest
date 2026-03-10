@@ -38,7 +38,7 @@ const Hero = () => {
         >
           <Button 
             size="lg" 
-            className="bg-white text-black hover:bg-white/90 text-sm tracking-wider uppercase px-8 py-6 rounded-none"
+            className="bg-white text-black hover:bg-transparent hover:text-white border border-white text-sm tracking-wider uppercase px-8 py-6 rounded-none transition-colors duration-300"
             onClick={() => document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Рассчитать стоимость
@@ -46,7 +46,7 @@ const Hero = () => {
           <Button 
             size="lg" 
             variant="outline" 
-            className="border-white text-white hover:bg-white/10 text-sm tracking-wider uppercase px-8 py-6 rounded-none"
+            className="border-white bg-transparent text-white hover:bg-transparent hover:text-white/70 text-sm tracking-wider uppercase px-8 py-6 rounded-none transition-colors duration-300"
             onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Смотреть проекты
