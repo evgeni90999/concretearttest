@@ -59,7 +59,7 @@
     
     /* Architecture Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(0 0% 0% / 0.8), hsl(0 0% 0% / 0.4));
-    --gradient-overlay: linear-gradient(180deg, hsl(0 0% 0% / 0.9), hsl(0 0% 0% / 0.1));
+    --gradient-overlay: linear-gradient(180deg, hsl(0 0% 0% / 0.85), hsl(0 0% 0% / 0.55));
     
     /* Elegant Shadows */
     --shadow-architectural: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
