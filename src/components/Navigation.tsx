@@ -31,13 +31,23 @@ const Navigation = () => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       scrolled ? "bg-background/90 backdrop-blur-md border-b border-border" : "bg-transparent"
     }`}>
-      <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-        <button 
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className={`text-minimal transition-colors ${scrolled ? "text-foreground" : "text-white"}`}
-        >
-          CONCRETEART
-        </button>
+      <div className="container mx-auto px-6 py-4 flex items-center justify-between gap-6">
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className={`text-minimal transition-colors whitespace-nowrap ${scrolled ? "text-foreground" : "text-white"}`}
+          >
+            CONCRETEART
+          </button>
+          <a
+            href="tel:+375291334306"
+            className={`hidden sm:inline-flex text-sm tracking-wide whitespace-nowrap transition-colors ${
+              scrolled ? "text-muted-foreground hover:text-foreground" : "text-white/80 hover:text-white"
+            }`}
+          >
+            +375 (29) 133-43-06
+          </a>
+        </div>
 
         <div className="hidden md:flex items-center space-x-10">
           {navItems.map((item) => (

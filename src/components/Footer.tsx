@@ -67,10 +67,16 @@ const Footer = () => {
           </div>
             </div>
           </div>
-          <div className="border-t border-background/20 pt-8">
-            <p className="text-xs text-background/40 text-center">
+          <div className="border-t border-background/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-background/40">
+            <p>
               © {new Date().getFullYear()} ConcreteArt. Все права защищены.
             </p>
+            <a
+              href="tel:+375291334306"
+              className="text-background/60 hover:text-background transition-colors"
+            >
+              +375 (29) 133-43-06
+            </a>
           </div>
         </div>
       </div>
