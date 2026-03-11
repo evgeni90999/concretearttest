@@ -22,6 +22,8 @@ const Calculator = () => {
   const [showModal, setShowModal] = useState(false);
   const [contactType, setContactType] = useState<"email" | "telegram">("telegram");
   const [contactValue, setContactValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
 
   const currentOptions = step === 0 ? productTypes : step === 1 ? sizes : complexities;
@@ -40,6 +42,42 @@ const Calculator = () => {
       setStep(step + 1);
     } else {
       setShowModal(true);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!contactValue.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData();
+      formData.set("_form", "Калькулятор");
+      formData.set("product", product);
+      formData.set("size", size);
+      formData.set("complexity", complexity);
+      formData.set("contactType", contactType);
+      formData.set("contact", contactValue);
+
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) throw new Error("Form submit failed");
+
+      setShowModal(false);
+      setShowSuccess(true);
+      setContactValue("");
+    } catch {
+      toast({
+        title: "Не удалось отправить",
+        description: "Попробуйте ещё раз.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -131,16 +169,10 @@ const Calculator = () => {
 
           <form
             className="space-y-4 mt-2"
+            onSubmit={handleSubmit}
             action="https://formspree.io/f/xreyplvv"
             method="POST"
           >
-            <input type="hidden" name="_redirect" value="/spasibo.html" />
-            <input type="hidden" name="_form" value="Калькулятор" />
-            <input type="hidden" name="product" value={product} />
-            <input type="hidden" name="size" value={size} />
-            <input type="hidden" name="complexity" value={complexity} />
-            <input type="hidden" name="contactType" value={contactType} />
-
             <div className="flex gap-2">
               <button
                 type="button"
@@ -179,11 +211,27 @@ const Calculator = () => {
             <Button
               className="w-full rounded-none"
               type="submit"
-              disabled={!contactValue.trim()}
+              disabled={!contactValue.trim() || isSubmitting}
             >
-              Отправить
+              {isSubmitting ? "Отправка..." : "Отправить"}
             </Button>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showSuccess} onOpenChange={setShowSuccess}>
+        <DialogContent className="sm:max-w-md rounded-none">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-light text-architectural">
+              Спасибо!
+            </DialogTitle>
+            <DialogDescription>
+              Запрос отправлен. Мы пришлём расчёт выбранным способом связи.
+            </DialogDescription>
+          </DialogHeader>
+          <Button className="w-full rounded-none" onClick={() => setShowSuccess(false)}>
+            Закрыть
+          </Button>
         </DialogContent>
       </Dialog>
     </section>

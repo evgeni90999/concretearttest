@@ -6,6 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -19,13 +26,50 @@ const Contact = () => {
   const [projectType, setProjectType] = useState("");
   const [message, setMessage] = useState("");
   const [consent, setConsent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!name.trim() || !phone.trim() || !consent) {
-      e.preventDefault();
       toast({ title: "Заполните обязательные поля", variant: "destructive" });
       return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData();
+      formData.set("_form", "Контакты");
+      formData.set("name", name);
+      formData.set("phone", phone);
+      if (projectType) formData.set("projectType", projectType);
+      if (message.trim()) formData.set("message", message);
+      formData.set("consent", consent ? "yes" : "no");
+
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+
+      if (!res.ok) throw new Error("Form submit failed");
+
+      setShowSuccess(true);
+      setName("");
+      setPhone("");
+      setProjectType("");
+      setMessage("");
+      setConsent(false);
+    } catch {
+      toast({
+        title: "Не удалось отправить заявку",
+        description: "Попробуйте ещё раз или напишите нам в мессенджер.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -59,8 +103,6 @@ const Contact = () => {
             method="POST"
             className="space-y-5"
           >
-            <input type="hidden" name="_redirect" value="/spasibo.html" />
-            <input type="hidden" name="_form" value="Контакты" />
             <Input
               placeholder="Ваше имя *"
               name="name"
@@ -78,7 +120,7 @@ const Contact = () => {
               className="rounded-none border-border h-12"
               maxLength={20}
             />
-            <Select value={projectType} onValueChange={setProjectType} name="projectType">
+            <Select value={projectType} onValueChange={setProjectType}>
               <SelectTrigger className="rounded-none border-border h-12">
                 <SelectValue placeholder="Тип проекта" />
               </SelectTrigger>
@@ -113,13 +155,29 @@ const Contact = () => {
               type="submit"
               size="lg"
               className="w-full rounded-none h-12 text-sm tracking-wider uppercase"
-              disabled={!consent}
+              disabled={!consent || isSubmitting}
             >
-              Отправить заявку
+              {isSubmitting ? "Отправка..." : "Отправить заявку"}
             </Button>
           </motion.form>
         </div>
       </div>
+
+      <Dialog open={showSuccess} onOpenChange={setShowSuccess}>
+        <DialogContent className="sm:max-w-md rounded-none">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-light text-architectural">
+              Спасибо!
+            </DialogTitle>
+            <DialogDescription>
+              Заявка отправлена. Мы свяжемся с вами в ближайшее время.
+            </DialogDescription>
+          </DialogHeader>
+          <Button className="w-full rounded-none" onClick={() => setShowSuccess(false)}>
+            Закрыть
+          </Button>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
