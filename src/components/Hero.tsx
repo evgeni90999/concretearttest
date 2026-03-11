@@ -53,15 +53,6 @@ const Hero = () => {
           </Button>
         </motion.div>
       </div>
-      
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <div className="w-px h-16 bg-white/40" />
-      </motion.div>
     </section>
   );
 };
