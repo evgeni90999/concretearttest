@@ -12,7 +12,7 @@ import {
 
 const productTypes = ["Столешница", "Раковина", "Барная стойка", "Другое"];
 const sizes = ["< 1 м²", "1–2 м²", "2–3 м²", "> 3 м²"];
-const complexities = ["Базовая", "Средняя", "Сложная"];
+const complexities = ["Базовая", "Средняя", "Высокая"];
 
 const Calculator = () => {
   const [step, setStep] = useState(0);
@@ -153,6 +153,54 @@ const Calculator = () => {
               </Button>
             </div>
           </motion.div>
+
+          <div className="mt-8 md:mt-10 border border-border/70 bg-muted/40 p-6 md:p-8 space-y-5 text-sm text-muted-foreground">
+            <h3 className="text-base md:text-lg font-semibold text-architectural">
+              Как выбрать уровень сложности?
+            </h3>
+
+            <div className="space-y-2">
+              <p className="font-medium text-foreground">🔹 Базовая сложность</p>
+              <p>
+                Проекты с простой геометрией и минимальной обработкой. Подходит для:
+              </p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Прямоугольные и квадратные столешницы</li>
+                <li>Подоконники и ступени</li>
+                <li>Простые полки и столики</li>
+                <li>Меньше ручной работы — экономия на изготовлении</li>
+              </ul>
+            </div>
+
+            <div className="space-y-2">
+              <p className="font-medium text-foreground">🔹 Средняя сложность</p>
+              <p>Изделия с элементами индивидуального дизайна:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Столешницы с интегрированной мойкой (бесшовное соединение)</li>
+                <li>Раковины классических овальных или круглых форм</li>
+                <li>Барные стойки с плавными изгибами</li>
+                <li>Изделия с отверстиями под смесители сложной конфигурации</li>
+              </ul>
+            </div>
+
+            <div className="space-y-2">
+              <p className="font-medium text-foreground">🔹 Высокая сложность</p>
+              <p>
+                Уникальные авторские проекты, требующие максимальной вовлечённости мастера:
+              </p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Сложные многосоставные формы (волны, асимметрия)</li>
+                <li>Интеграция декоративных элементов (подсветка, вкрапления)</li>
+                <li>Комбинирование разных фактур и цветов в одном изделии</li>
+                <li>Эксклюзивные дизайнерские раковины и арт-объекты</li>
+              </ul>
+            </div>
+
+            <p className="text-xs md:text-sm text-muted-foreground/80 border-t border-border/60 pt-4">
+              💡 Совет: Если сомневаетесь в выборе — оставьте комментарий в заявке, и мы поможем
+              подобрать оптимальный вариант под ваш проект.
+            </p>
+          </div>
         </div>
       </div>
 
