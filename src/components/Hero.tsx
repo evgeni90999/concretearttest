@@ -28,7 +28,7 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="text-base md:text-xl text-white/80 font-light tracking-wide max-w-2xl mx-auto mb-10"
         >
-          Индивидуальные столешницы, раковины и барные стойки из высококачественного бетона. Ручная работа. Срок службы — десятилетия.
+          Индивидуальные столешницы, раковины и мебель из высококачественного бетона. Ручная работа. Срок службы — десятилетия.
         </motion.p>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
@@ -66,6 +67,18 @@ const Navigation = () => {
         </div>
 
         <div className="hidden md:flex items-center space-x-4">
+          <motion.button
+            onClick={() => scrollTo("contact")}
+            className={`rounded-none text-sm font-medium tracking-wider uppercase px-5 py-2.5 transition-colors ${
+              scrolled
+                ? "bg-foreground text-background hover:bg-foreground/90"
+                : "bg-white text-black hover:bg-white/90"
+            }`}
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ repeat: Infinity, repeatDelay: 2, duration: 1.2 }}
+          >
+            Заказать
+          </motion.button>
           <ThemeToggle />
         </div>
 
@@ -91,6 +104,12 @@ const Navigation = () => {
                 {item.label}
               </button>
             ))}
+            <Button
+              className="w-full rounded-none mt-2"
+              onClick={() => scrollTo("contact")}
+            >
+              Заказать
+            </Button>
             <div className="pt-4 border-t border-border">
               <ThemeToggle />
             </div>
